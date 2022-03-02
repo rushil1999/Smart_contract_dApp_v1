@@ -9,6 +9,10 @@ import {
 } from "react-router-dom";
 import UserAccount from './components/UserAccount';
 import Web3 from 'web3';
+import PartyGrid from './components/PartyGrid';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import { Container, Row, Col } from 'react-bootstrap';
+import {requestAccount} from './utils/eWallet';
 
 function App() {
 
@@ -16,47 +20,55 @@ function App() {
   const [userAccount, setUserAccount] = useState();
   const [loading, setLoading] = useState(true);
 
-  const requestAccount = async () => {
+  const setupWallet = async () => {
     setLoading(true);
-    console.log('Running Meta Mask');
-    // const address = await window.ethereum.request({method: 'eth_requestAccounts'});
-    // console.log(address[0]); 
+    const {userAccount, web3} = await requestAccount();
+    setUserAccount(userAccount);
+    setCryptoState(web3);
+    setLoading(false)
+    // console.log('Running Meta Mask');
 
-    let provider = window.ethereum;
-    if(typeof provider !== 'undefined'){
-      console.log(provider);
-      provider
-        .request({method:'eth_requestAccounts'})
-        .then((account)=>{
-          console.log('Accounts', account);
-          setUserAccount(account);
-          const web3 = new Web3(provider);
-          setCryptoState(web3);
-          setLoading(false);
-        })
-        .catch((err)=>{
-          console.log(err);
-        });
-    }
-
-    
-    
+    // let provider = window.ethereum;
+    // if(typeof provider !== 'undefined'){
+    //   console.log(provider);
+    //   provider
+    //     .request({method:'eth_requestAccounts'})
+    //     .then((account)=>{
+    //       console.log('Accounts', account);
+    //       setUserAccount(account);
+    //       const web3 = new Web3(provider);
+    //       setCryptoState(web3);
+    //       setLoading(false);
+    //     })
+    //     .catch((err)=>{
+    //       console.log(err);
+    //     });
   }
 
   useEffect(()=>{
-    requestAccount();
+    setupWallet();
   }, [])
 
 
   return (
     <>
     {!loading && (
+      <>
+      <Container fluid>
+      <Row>
+        <Col>
+        <p style={{}}></p>
+        Decentralized Charity Application</Col>
+      </Row>
+      </Container>
       <Router>
         <Routes>
           <Route path="/" element={<UserAccount web3={cryptoState} account={userAccount}/>}/>
           {/* <Route path="/ticket/:id" element={<TicketDetails />}/> */}
+          <Route path="/grid" element={<PartyGrid web3={cryptoState} account={userAccount}/>}/>
         </Routes>
       </Router>
+      </>
     )}
     
     </>
