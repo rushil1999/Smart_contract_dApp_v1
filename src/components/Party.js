@@ -5,6 +5,7 @@ const Party = props => {
 
   const fetchParyDetails = async (index) => {
     const {contractState, userAccount} = props;
+    console.log(contractState);
     const party = await contractState.methods.getPartyDetails(index).call({value: userAccount});
     setPartyDetails(party);
     console.log(party)
