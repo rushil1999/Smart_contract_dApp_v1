@@ -36,3 +36,15 @@
     transform: rotate(360deg);
   }
 }
+
+.truncate {
+  width: 200px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.truncate:hover {
+  overflow: visible;
+  white-space: normal;
+  width: auto; /* just added this line */
+}

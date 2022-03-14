@@ -1,28 +1,35 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from "react";
+import { Card, Button } from "react-bootstrap";
 
 const Party = props => {
+  const { e, userAccount, contract } = props;
   const [partyDetails, setPartyDetails] = useState({});
+  const [contractState, setContractState] = useState({});
+  const [user, setUser] = useState("");
 
-  const fetchParyDetails = async (index) => {
-    const {contractState, userAccount} = props;
-    console.log(contractState);
-    const party = await contractState.methods.getPartyDetails(index).call({value: userAccount});
-    setPartyDetails(party);
-    console.log(party)
-  }
+  useEffect(() => {
+    console.log("props", props);
+    setPartyDetails(e);
+    setContractState(contract);
+    setUser(userAccount);
+    console.log("contract", contractState);
+    console.log("user", user);
+  }, []);
 
-  useEffect(()=>{
-    const {index}= props;
-    fetchParyDetails(index);
-  }, [])
-
-  return(
-    <React.Fragment>
-      <p>Name: {partyDetails.name}</p>
-      <p>Cause: {partyDetails.cause}</p>
-      <p>Link: {partyDetails.link}</p>
-    </React.Fragment>
+  return (
+    <>
+      <Card>
+        <Card.Header as='h5'>{partyDetails.name}</Card.Header>
+        <Card.Body>
+          <Card.Title>{partyDetails.link}</Card.Title>
+          <Card.Text>{partyDetails.cause}</Card.Text>
+          <Button variant='primary' href='/'>
+            Go somewhere
+          </Button>
+        </Card.Body>
+      </Card>
+    </>
   );
-}
+};
 
 export default Party;
