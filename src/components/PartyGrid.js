@@ -4,7 +4,7 @@ import { CHARITY_POOL_ADDRESS } from '../utils/contractAddresses';
 import Button from 'react-bootstrap/Button';
 import { Form } from 'react-bootstrap';
 import { requestAccount } from '../utils/eWallet';
-import Party from './Party';
+import PartyTile from './PartyTile';
 
 const PartyGrid = props => {
 
@@ -22,9 +22,7 @@ const PartyGrid = props => {
   const { web3, account } = props;
 
   const init = () => {
-    console.log('BEGIN')
     const contract = new web3.eth.Contract(CharityPool.abi, CHARITY_POOL_ADDRESS);
-    console.log(contract);
     // setContractState(contract);
     setContractState(contract); //async
     // console.log(contractState);
@@ -35,12 +33,33 @@ const PartyGrid = props => {
     setLoading(true);
     console.log(contractState, account[0]);
     if (contractState) {
-      console.log(contractState.methods);
       const partiesCount = await contractState.methods.getTotalParties().call({ from: account[0] });
-      console.log(partiesCount);
+      console.log('Final Parties count', partiesCount);
       setPartyCount(partiesCount);
     }
     setLoading(false);
+  }
+
+  const fetchParties = async () => {
+    console.log('Fetching parties');
+    const retreivedParties = [];
+    setLoading(true);
+    if(contractState){
+      for(var i =0;i<partyCount;i++){
+        const party = await contractState.methods.getPartyDetails(i).call({from: account[0]});
+        console.log('Fetched Party', party);
+        const {name, cause, link} = party;
+        const retreivedParty = {
+          index: i,
+          name,
+          cause, 
+          link, 
+        }
+        retreivedParties.push(retreivedParty);
+      }
+      setParties(retreivedParties);
+      setLoading(false);
+    }
   }
 
   const handleFormFieldChange = e => {
@@ -85,7 +104,11 @@ const PartyGrid = props => {
     contractState && fetchPartiesCount();
   }, [contractState])
 
+  useEffect(()=>{
+    partyCount>0 && fetchParties();
+  }, [partyCount])
 
+  console.log('Before rendering', loading, partyCount, parties);
   return (
     <React.Fragment>
       {!loading && ( 
@@ -130,9 +153,9 @@ const PartyGrid = props => {
           </React.Fragment>
           <React.Fragment>
             {partyCount> 0 && (
-              parties.map((e, index)=>{
+              parties.map((e)=>{
                 return(
-                  <Party index={index} userAccount={account} contract={contractState}/>
+                  <PartyTile partyDetails={e} account={account} contractState={contractState}/>
                 )
               })
             )} 
