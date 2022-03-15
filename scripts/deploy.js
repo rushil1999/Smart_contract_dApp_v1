@@ -14,8 +14,8 @@ async function main() {
   // await hre.run('compile');
 
   // We get the contract to deploy
-  const CharityPool = await hre.ethers.getContractFactory("CharityPool");
-  const charityPool = await CharityPool.deploy();
+  const ProjectPool = await hre.ethers.getContractFactory("ProjectPool");
+  const projectPool = await ProjectPool.deploy();
 
   // const PartyContract = await hre.ethers.getContractFactory("PartyContract");
   // const partyContract = await PartyContract.deploy();
@@ -23,11 +23,11 @@ async function main() {
   // const Events = await hre.ethers.getContractFactory("Events");
   // const events = await Events.deploy();
 
-  await charityPool.deployed();
+  await projectPool.deployed();
   // await partyContract.deployed();
   // await events.deployed();
 
-  console.log("Charity Pool:", charityPool.address);
+  console.log("Project Pool:", projectPool.address);
 }
 
 // We recommend this pattern to be able to use async/await everywhere

@@ -59,6 +59,61 @@
         {
           "indexed": false,
           "internalType": "address",
+          "name": "partyAddress",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "address",
+          "name": "contractAddress",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "partyCount",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "string",
+          "name": "name",
+          "type": "string"
+        },
+        {
+          "indexed": false,
+          "internalType": "string",
+          "name": "description",
+          "type": "string"
+        },
+        {
+          "indexed": false,
+          "internalType": "string",
+          "name": "link",
+          "type": "string"
+        },
+        {
+          "indexed": false,
+          "internalType": "string",
+          "name": "unit",
+          "type": "string"
+        },
+        {
+          "indexed": false,
+          "internalType": "int256",
+          "name": "valueRequired",
+          "type": "int256"
+        }
+      ],
+      "name": "NewProjectRegistered",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "address",
           "name": "from",
           "type": "address"
         },
@@ -110,8 +165,8 @@
       "type": "event"
     }
   ],
-  "bytecode": "0x6080604052348015600f57600080fd5b50603f80601d6000396000f3fe6080604052600080fdfea26469706673582212207004f4403171b40e4bce738840b2d27ee966b1fe04a1d65dfb9ac3262b527ac164736f6c63430008040033",
-  "deployedBytecode": "0x6080604052600080fdfea26469706673582212207004f4403171b40e4bce738840b2d27ee966b1fe04a1d65dfb9ac3262b527ac164736f6c63430008040033",
+  "bytecode": "0x6080604052348015600f57600080fd5b50603f80601d6000396000f3fe6080604052600080fdfea2646970667358221220b65435b793c4318bfadcae7531db83dd31c6980ff35b2cf45954db33074b53c264736f6c63430008040033",
+  "deployedBytecode": "0x6080604052600080fdfea2646970667358221220b65435b793c4318bfadcae7531db83dd31c6980ff35b2cf45954db33074b53c264736f6c63430008040033",
   "linkReferences": {},
   "deployedLinkReferences": {}
 }

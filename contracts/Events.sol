@@ -3,13 +3,15 @@ pragma solidity >=0.7.0 <0.9.0;
 
 contract Events{
 
-    event NewPartyRegistered(
+    event NewProjectRegistered(
         address partyAddress,
         address contractAddress,
         uint256 partyCount,
         string name, 
-        string cause, 
-        string link
+        string description, 
+        string link,
+        string unit, 
+        int valueRequired
     );
 
     event ReceivedToken(
