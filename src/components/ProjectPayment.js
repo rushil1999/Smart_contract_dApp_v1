@@ -5,6 +5,7 @@ import {useLocation} from 'react-router-dom';
 import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
 import { payProject } from '../services/projectPaymentService';
+import { getProjectDetails } from '../services/projectDetailsService';
 
 const ProjectPayment = props => {
 
@@ -14,7 +15,8 @@ const ProjectPayment = props => {
     description: '',
     unit: '',
     valueRequired: 0,
-    link: '' 
+    link: '' ,
+    currentBalance: 0
   });
   const [projectIndex, setProjectIndex] = useState();
   const [loading, setLoading] = useState(true);
@@ -38,27 +40,21 @@ const ProjectPayment = props => {
 
   const fetchProjectDetails = async () => {
     setLoading(true);
-    try{
-      const project = await contractState.methods.getProjectDetails(projectIndex).call();
-      if(project){
-        console.log(project);
-        const {name, link, description, unit, valueRequired} = project;
-        setProjectState({
-          index: projectIndex,
-          name, 
-          description, 
-          unit,
-          link,
-          valueRequired
-        });
-        setLoading(false);
-      }
-      else{
-        console.log('Could Not Fetch Project');
-      }
+    const serviceResponse = await getProjectDetails(contractState, projectIndex);
+    if(serviceResponse.success === true){
+      const {name, link, description, unit, valueRequired, currentBalance} = serviceResponse;
+      setProjectState({
+        name, 
+        link,
+        description,
+        unit, 
+        valueRequired,
+        currentBalance,
+      });
+      setLoading(false);
     }
-    catch(e){
-      console.log(e);
+    else{
+      console.log(serviceResponse.message);
     }
   }
 
