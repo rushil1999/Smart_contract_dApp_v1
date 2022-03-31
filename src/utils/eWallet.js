@@ -1,16 +1,17 @@
 import Web3 from 'web3';
 export const requestAccount = async () => {
-  console.log('Running Meta Mask');
+  // console.log('Running Meta Mask');
   // var userAccount;
   let provider = window.ethereum;
   if(typeof provider !== 'undefined'){
     try{
       console.log(provider);
       const userAccount = await window.ethereum.request({method:'eth_requestAccounts'})
-      const web3 = new Web3(provider);
-      return {userAccount, web3};
+      console.log('Fetched User Account', userAccount);
+      return userAccount;
     }
     catch(err){
+      console.log('Error in requesting account');
       console.log(err);
     }
     // provider
@@ -24,5 +25,20 @@ export const requestAccount = async () => {
     //   .catch((err)=>{
     //     console.log(err);
     //   });
+  }
+}
+
+
+export const getWeb3 = () => {
+  let provider = window.ethereum;
+  if(typeof provider !== 'undefined'){
+    try{
+      const web3 = new Web3(provider);
+      return web3;
+    }
+    catch(err){
+      console.log('Error in requesting account');
+      console.log(err);
+    }
   }
 }

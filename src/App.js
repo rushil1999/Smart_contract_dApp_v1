@@ -7,42 +7,25 @@ import {
   Route,
   Link
 } from "react-router-dom";
-import UserAccount from './components/UserAccount';
 import Web3 from 'web3';
-import PartyGrid from './components/PartyGrid';
+import ProjectsGrid from './components/ProjectsGrid';
+import ProjectRegisteration from './components/ProjectRegisteration';
+import ProjectPayment from './components/ProjectPayment';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Container, Row, Col } from 'react-bootstrap';
-import {requestAccount} from './utils/eWallet';
+import { Container, Row, Col, Navbar } from 'react-bootstrap';
+import {getWeb3} from './utils/eWallet';
 
 function App() {
 
   const [cryptoState, setCryptoState] = useState();
-  const [userAccount, setUserAccount] = useState();
   const [loading, setLoading] = useState(true);
 
-  const setupWallet = async () => {
+  const setupWallet = () => {
     setLoading(true);
-    const {userAccount, web3} = await requestAccount();
-    setUserAccount(userAccount);
+    const web3 = getWeb3();
+    console.log(web3);
     setCryptoState(web3);
     setLoading(false)
-    // console.log('Running Meta Mask');
-
-    // let provider = window.ethereum;
-    // if(typeof provider !== 'undefined'){
-    //   console.log(provider);
-    //   provider
-    //     .request({method:'eth_requestAccounts'})
-    //     .then((account)=>{
-    //       console.log('Accounts', account);
-    //       setUserAccount(account);
-    //       const web3 = new Web3(provider);
-    //       setCryptoState(web3);
-    //       setLoading(false);
-    //     })
-    //     .catch((err)=>{
-    //       console.log(err);
-    //     });
   }
 
   useEffect(()=>{
@@ -56,18 +39,32 @@ function App() {
       <>
       <Container fluid>
       <Row>
-        <Col>
-        <p style={{}}></p>
-        Decentralized Charity Application</Col>
+        <Navbar style={{position: "static", width: "100%", marginBottom: "20px"}}
+          bg="dark" 
+          variant="dark" 
+          fixed="top"
+        >
+          <Container className="text-center">
+            <Navbar.Brand >
+              Crowd Funding
+            </Navbar.Brand>
+            <br/>
+          </Container>
+        </Navbar>
+      </Row>
+      <Row>
+        <Col style={{paddingLeft:"5px", paddingRight:"5px"}}>
+        <Router>
+          <Routes>
+            <Route path="/register" element={<ProjectRegisteration web3={cryptoState} />}/>
+            <Route path="/project/:id" element={<ProjectPayment web3={cryptoState}  />}/>
+            <Route path="/grid" element={<ProjectsGrid web3={cryptoState} />}/>
+          </Routes>
+        </Router>
+        </Col>
       </Row>
       </Container>
-      <Router>
-        <Routes>
-          <Route path="/" element={<UserAccount web3={cryptoState} account={userAccount}/>}/>
-          {/* <Route path="/ticket/:id" element={<TicketDetails />}/> */}
-          <Route path="/grid" element={<PartyGrid web3={cryptoState} account={userAccount}/>}/>
-        </Routes>
-      </Router>
+     
       </>
     )}
     
