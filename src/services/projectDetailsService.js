@@ -11,10 +11,16 @@ export const getProjectDetails = async (contract, projectIndex) => {
       description,
       unit,
       valueRequired,
-      currentBalance: converWeiToEth(currentContractBalance)
+      currentBalance: converWeiToEth(currentContractBalance),
+      success: true,
     }
   }
   catch(err){
     console.log(err);
+    return{
+      success: false,
+      message: "Project Details Service Error",
+      err,
+    }
   }
 }

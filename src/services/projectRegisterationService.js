@@ -4,9 +4,18 @@ export const registerProject = async (contract, project, userAccount) => {
     console.log('In Service', contract, userAccount);
     const transactionResponse = await contract.methods.addNewProject(userAccount, name, description, link, unit, value).send({ from: userAccount });
     console.log(transactionResponse);
-    return transactionResponse;
+    return {
+      success: true,
+      transactionResponse,
+    }
+      
   }
   catch(err){
     console.log('Error', err);
+    return {
+      success: false,
+      message: "Project Registeration Service Error",
+      err,
+    }
   }
 }

@@ -54,6 +54,7 @@ const ProjectPayment = props => {
       setLoading(false);
     }
     else{
+      //TODO: Put Alert Serice here
       console.log(serviceResponse.message);
     }
   }
