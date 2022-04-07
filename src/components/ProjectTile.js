@@ -9,7 +9,7 @@ const ProjectTile = props => {
 
 
   const redirectToPayment = () => {
-    navigator(`/project/${index}`)
+    setTimeout(()=>navigator(`/project/${index}`,2000));
   }
 
   return(

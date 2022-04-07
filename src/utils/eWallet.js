@@ -6,8 +6,10 @@ export const requestAccount = async () => {
   if(typeof provider !== 'undefined'){
     try{
       console.log(provider);
+      const alreadyPresentAccounts = await window.ethereum.request({method: "eth_accounts"});
+     
       const userAccount = await window.ethereum.request({method:'eth_requestAccounts'})
-      console.log('Fetched User Account', userAccount);
+      console.log('Fetched User Account', userAccount, alreadyPresentAccounts);
       return userAccount;
     }
     catch(err){
