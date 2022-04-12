@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Form } from 'react-bootstrap';
+import { Form} from 'react-bootstrap';
 import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
 import { requestAccount } from '../utils/eWallet';
@@ -7,7 +7,8 @@ import ProjectPool from '../contracts/ProjectPool.sol/ProjectPool.json';
 import { PROJECT_POOL_ADDRESS } from '../utils/contractAddresses';
 import {registerProject} from '../services/projectRegisterationService';
 import {useNavigate} from 'react-router-dom';
-import Modal from 'react-bootstrap/Modal';
+import { Toast, ToastContainer } from 'react-bootstrap';
+import Spinner from 'react-bootstrap/Spinner';
 import { INTERNAL_SERVER_ERROR_MESSAGE, PROJECT_REGISTERED_SUCCESS_MESSAGE } from '../utils/messageUtils';
 
 
@@ -39,16 +40,11 @@ const ProjectRegisteration = (props) => {
 
   const handleProjectRegisteration = async () => {
     console.log(projectState, contractState);
-    setLoading(true);
+    // setLoading(true);
     const userAccount  = await requestAccount();
-    // const { name, description, link, unit, value } = projectState;
-    // console.log(contractState, userAccount[0]);
-    // console.log('Project State 1', projectState, contractState.methods, parseInt(value));
     const serviceResponse = await registerProject(contractState, projectState, userAccount[0]);
-    // console.log(serviceResponse);
     if(serviceResponse.success === true){
       setNotification({
-        ...notification,
         show: true,
         message: PROJECT_REGISTERED_SUCCESS_MESSAGE,
       });
@@ -61,6 +57,8 @@ const ProjectRegisteration = (props) => {
         show: true,
         message: INTERNAL_SERVER_ERROR_MESSAGE
       });
+
+      console.log('Set Notification');
     }
   }
 
@@ -73,13 +71,19 @@ const ProjectRegisteration = (props) => {
   },[])
 
   const { name, description, link, value, unit } = projectState;
+  const {show, message} = notification
   return (
     <>
-    {!loading && (
+    {loading ? (
+
+    <Spinner animation="border" role="status">
+    <span className="visually-hidden">Loading...</span>
+    </Spinner>
+    ) : (
+      <>
       <Card border="info" style={{paddingTop: "15px"}}>
         <Card.Header>Register Your Project</Card.Header>
         <Card.Body>
-          <Card.Text>
             <Form>
               <Form.Group className="mb-3" controlId="formBasicEmail">
                 <Form.Label>Name</Form.Label>
@@ -127,23 +131,27 @@ const ProjectRegisteration = (props) => {
 
             </Form>
 
-          </Card.Text>
           <Button
             variant="primary"
             onClick={handleProjectRegisteration}>
             Submit
           </Button>
         </Card.Body>
-        <Modal 
-          show={notification.show} 
-          onHide={()=>setNotification({...notification, show: false})}
-          enforceFocus={false}
-        >
-          <Modal.Body closeButton>
-            <p>{notification.message}</p>
-          </Modal.Body>
-        </Modal>
+        
       </Card>
+      <ToastContainer className="p-3" position={'top-end'} delay={3000} autohide>
+      <Toast 
+        show={show} 
+        onClose={()=>{console.log('closing notif'); setNotification({...notification, show:false})}}
+        position={'top-end'}
+      >
+        <Toast.Header closeButton={true}>
+          Notification  
+        </Toast.Header>
+        <Toast.Body>{message}</Toast.Body>
+      </Toast>
+      </ToastContainer>
+      </>
     )}
     </>
   )
